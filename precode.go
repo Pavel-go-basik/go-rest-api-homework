@@ -43,7 +43,7 @@ var tasks = map[string]Task{
 func getTask(w http.ResponseWriter, r *http.Request) {
 	resp, err := json.Marshal(tasks)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		http.Error(w, "Internal Server Error", 500)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -55,14 +55,12 @@ func getTaskId(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	task, ok := tasks[id]
 	if !ok {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("400 Bad Request"))
+		http.Error(w, "Bad request", 400)
 		return
 	}
 	resp, err := json.Marshal(task)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("400 Bad Request"))
+		http.Error(w, "Bad request", 400)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -79,8 +77,7 @@ func postTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err = json.Unmarshal(buf.Bytes(), &task); err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("400 Bad Request"))
+		http.Error(w, "Bad request", 400)
 		return
 	}
 	tasks[task.ID] = task
@@ -92,8 +89,7 @@ func delTaskId(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	_, ok := tasks[id]
 	if !ok {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("400 Bad Request"))
+		http.Error(w, "Bad request", 400)
 		return
 	}
 	delete(tasks, id)
