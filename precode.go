@@ -44,12 +44,10 @@ func getTask(w http.ResponseWriter, r *http.Request) {
 	resp, err := json.Marshal(tasks)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("500 Internal Server Error"))
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("200 - OK"))
 	w.Write(resp)
 }
 
@@ -69,7 +67,6 @@ func getTaskId(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("200 - OK"))
 	w.Write(resp)
 }
 
@@ -89,7 +86,6 @@ func postTask(w http.ResponseWriter, r *http.Request) {
 	tasks[task.ID] = task
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte("201 Created"))
 }
 
 func delTaskId(w http.ResponseWriter, r *http.Request) {
@@ -103,7 +99,6 @@ func delTaskId(w http.ResponseWriter, r *http.Request) {
 	delete(tasks, id)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("200 OK"))
 }
 
 func main() {
